@@ -17,6 +17,19 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    window.onpopstate = e => {
+      if (window.location.pathname === '/') {
+        const confirm = window.confirm('Are you sure?');
+        if (confirm) {
+          this.setState({ activePanel: window.location.pathname });
+        } else {
+          const { activePanel } = this.state;
+          window.history.pushState({ activePanel }, activePanel, activePanel);
+        }
+      } else {
+        this.setState({ activePanel: window.location.pathname });
+      }
+    };
     connect.subscribe(e => {
       switch (e.detail.type) {
         case 'VKWebAppGetUserInfoResult':
@@ -32,7 +45,7 @@ class App extends React.Component {
   go = e => {
     const { to } = e.currentTarget.dataset;
     this.setState({ activePanel: to }, () => {
-      window.history.pushState({}, to, to);
+      window.history.pushState({ activePanel: to }, to, to);
     });
   };
 

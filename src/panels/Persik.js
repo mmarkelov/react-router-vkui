@@ -15,12 +15,18 @@ import Icon24Back from '@vkontakte/icons/dist/24/back';
 const osname = platform();
 
 const Persik = ({ id, go }) => {
+  const back = e => {
+    const cofirm = window.confirm('Are you sure?');
+    if (cofirm) {
+      go(e);
+    }
+  };
 
   return (
     <Panel id={id}>
       <PanelHeader
         left={
-          <HeaderButton onClick={go} data-to="/">
+          <HeaderButton onClick={back} data-to="/">
             {osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}
           </HeaderButton>
         }

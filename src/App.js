@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
 import connect from '@vkontakte/vkui-connect';
 import { View } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
@@ -8,9 +7,14 @@ import Home from './panels/Home';
 import Persik from './panels/Persik';
 
 class App extends React.Component {
-  state = {
-    fetchedUser: null,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activePanel: window.location.pathname,
+      fetchedUser: null,
+    };
+  }
 
   componentDidMount() {
     connect.subscribe(e => {
@@ -25,22 +29,19 @@ class App extends React.Component {
     connect.send('VKWebAppGetUserInfo', {});
   }
 
+  go = e => {
+    const { to } = e.currentTarget.dataset;
+    this.setState({ activePanel: to }, () => {
+      window.history.pushState({}, to, to);
+    });
+  };
+
   render() {
-    const Wrapper = (id, component) => (
-      <View activePanel={id}>{component}</View>
-    );
-
-    const RoutePersik = () => Wrapper('persik', <Persik id="persik" />);
-
-    const RouteHome = () => Wrapper('home', <Home id="home" />);
-
     return (
-      <Router>
-        <div>
-          <Route path="/" exact component={RouteHome} />
-          <Route path="/test/" component={RoutePersik} />
-        </div>
-      </Router>
+      <View activePanel={this.state.activePanel}>
+        <Home id="/" fetchedUser={this.state.fetchedUser} go={this.go} />
+        <Persik id="/persik" go={this.go} />
+      </View>
     );
   }
 }

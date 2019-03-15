@@ -1,48 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {
-  Panel,
-  ListItem,
-  Button,
-  Group,
-  Div,
-  Avatar,
-  PanelHeader,
-} from '@vkontakte/vkui';
+import { Panel, ListItem, Button, Group, Div, Avatar, PanelHeader } from '@vkontakte/vkui';
 
 const Home = ({ id, go, fetchedUser }) => (
-  <Panel id={id}>
-    <PanelHeader>Example</PanelHeader>
-    {fetchedUser && (
+    <Panel id={id}>
+      <PanelHeader>Example</PanelHeader>
+      {fetchedUser &&
       <Group title="User Data Fetched with VK Connect">
         <ListItem
-          before={
-            fetchedUser.photo_200 ? (
-              <Avatar src={fetchedUser.photo_200} />
-            ) : null
-          }
-          description={
-            fetchedUser.city && fetchedUser.city.title
-              ? fetchedUser.city.title
-              : ''
-          }
+            before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200}/> : null}
+            description={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}
         >
           {`${fetchedUser.first_name} ${fetchedUser.last_name}`}
         </ListItem>
-      </Group>
-    )}
+      </Group>}
 
-    <Group title="Navigation Example">
-      <Div>
-        <Link to="/test/" style={{ textDecoration: 'none' }}>
-          <Button size="xl" level="2">
+      <Group title="Navigation Example">
+        <Div>
+          <Button size="xl" level="2" onClick={go} data-to="/persik">
             Show me the Persik, please
           </Button>
-        </Link>
-      </Div>
-    </Group>
-  </Panel>
+        </Div>
+      </Group>
+    </Panel>
 );
 
 Home.propTypes = {
